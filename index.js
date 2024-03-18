@@ -15,6 +15,7 @@ connectDB(process.env.MONGO_URL);
 const server = new ApolloServer({
   schema: schema,
   playground: true,
+  introspection: true,
 });
 
 async function startServer() {
