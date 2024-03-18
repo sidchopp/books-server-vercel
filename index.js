@@ -7,11 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors());
 
 //db connection
 connectDB(process.env.MONGO_URL);
@@ -45,7 +41,7 @@ startServer().then(() => {
 
   // To test server deployment
   app.get("/", (req, res) => {
-    res.json("Server deployed successfully");
+    res.json("Server deployed successfully...");
   });
 
   app.listen(PORT, () => {
