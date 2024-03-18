@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: "https://books-sid-chopra.vercel.app",
+    origin: "*",
   })
 );
 
