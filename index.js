@@ -22,12 +22,26 @@ const server = new ApolloServer({
 });
 
 async function startServer() {
-  await server.start(); // Ensure server is started before applying middleware
+  await server.start();
   server.applyMiddleware({ app, path: "/graphql" });
 }
 
 startServer().then(() => {
   const PORT = process.env.PORT || 4000;
+
+  // Set up custom headers for CORS
+  app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    next();
+  });
 
   // To test server deployment
   app.get("/", (req, res) => {
