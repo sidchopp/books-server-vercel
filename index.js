@@ -1,5 +1,5 @@
 import express from "express";
-import { graphqlHTTP } from "express-graphql";
+import { ApolloServer } from "apollo-server-express";
 import cors from "cors";
 import schema from "./schema/schema.js";
 import connectDB from "./db/connect.js";
@@ -16,25 +16,25 @@ app.use(
 //db connection
 connectDB(process.env.MONGO_URL);
 
-app.use(
-  "/graphql",
-  graphqlHTTP({
-    schema: schema,
-    // rootValue: root,
-    graphiql: true,
-  })
-);
-const PORT = process.env.PORT || 4000;
-
-// app.get("/", (req, res) => {
-//   res.send("<h1>Hello World!</h1>");
-// });
-
-// To test server deployment
-app.get("/", (req, res) => {
-  res.json("Server deployed sucessfully");
+const server = new ApolloServer({
+  schema: schema,
+  playground: true,
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}..`);
+async function startServer() {
+  await server.start(); // Ensure server is started before applying middleware
+  server.applyMiddleware({ app, path: "/graphql" });
+}
+
+startServer().then(() => {
+  const PORT = process.env.PORT || 4000;
+
+  // To test server deployment
+  app.get("/", (req, res) => {
+    res.json("Server deployed successfully");
+  });
+
+  app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}..`);
+  });
 });
