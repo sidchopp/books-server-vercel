@@ -7,7 +7,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 //db connection
 connectDB(process.env.MONGO_URL);
